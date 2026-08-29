@@ -15,6 +15,9 @@
 ## Global Constraints
 
 - Identity must remove repeated prompts: admitted standing resolves ordinary circulation automatically.
+- The operator computer is a workbench only: everything local is a draft, even when running; official state exists only after a recorded promotion to LAB 8GB or LAB 512.
+- Promotion intentionally mirrors the Git `local branch -> merge to main` ritual: source state is explicit, destination is explicit, and successful remote admission is the boundary.
+- There is no implicit LAB destination. Every mutating command, ticket, executor request, and receipt names one canonical LAB resource.
 - SSH, Cloudflare tunnels, local files, environment variables, and static Supabase keys are transports or bootstrap material, never authority.
 - The Superstructure owns one manifest schema and guide; UI and API consume the same validator and canonical bytes.
 - The manifest never contains tokens, passwords, client secrets, private keys, SSH material, or Supabase service keys.
@@ -588,7 +591,9 @@ git commit -m "feat: teach lab the Powerfarm app manifest"
 
 Test target normalization, manifest target mismatch, dirty source, excluded
 secrets, deterministic archive digest, `--dry-run`, missing grant, expired ticket,
-and the invariant that `--force` cannot set `authorized=true`.
+the invariant that `--force` cannot set `authorized=true`, refusal when no
+destination is provided, and the invariant that local success remains
+`workbench (draft)` rather than `official`.
 
 - [ ] **Step 2: Preserve the current preflight behavior**
 
@@ -609,12 +614,18 @@ through stdin, never command arguments.
 Default output:
 
 ```text
+✓ Source: workbench (draft)
 ✓ Powerfarm identity: marketing-team
 ✓ Destination: LAB 8GB / App Park
 ✓ Standing permits deployment
 ✓ Artifact admitted
 ✓ Deployed and recorded
 ```
+
+Only the final executor completion and health receipt changes the displayed
+state from draft to official. Build, preview, archive upload, and ticket issuance
+alone never do so. JSON output includes `source_state: "draft"`, the exact
+`target_resource`, and `promotion_state`.
 
 On refusal print one reason and `--explain` instructions. Do not expose raw
 JWTs, tickets, SQL, or internal policy rows.

@@ -20,6 +20,13 @@ clouds LAB 8GB and LAB 512. It keeps its name and its useful fleet, source,
 build, install, verification, and receipt machinery. It stops treating SSH
 reachability, a local file, or a static Supabase key as authority.
 
+The operator workbench where `lab` is invoked is never a production location.
+Files, builds, previews, processes, and services on it are drafts even when they
+run successfully. Official runtime state exists only after an explicit,
+recorded promotion to LAB 8GB or LAB 512. This deliberately mirrors the familiar
+Git ritual in which local work is a draft and a merge to `main` establishes an
+unambiguous promoted state and destination.
+
 ## 2. Core rule
 
 > Identity is the passport. Standing is the freedom of circulation. A grant is
@@ -252,6 +259,20 @@ to both live park directories fails while a ticketed deployment succeeds.
 
 ## 11. CLI language
 
+### 11.1 Draft and promotion semantics
+
+`lab` MUST describe the current computer as `workbench (draft)` and MUST name
+the destination before any mutating operation. A successful local build or
+preview is evidence about a draft, never evidence that an official service
+exists. `lab deploy` is the promotion boundary: it binds the admitted source
+and artifact digests to exactly one canonical LAB resource, applies them through
+the authorized executor, and records a receipt.
+
+There is no implicit default between LAB 8GB and LAB 512. Interactive output,
+JSON output, plans, tickets, and receipts all carry the exact destination. A
+deployment only becomes official after executor completion and health
+verification; a failed or ambiguous attempt remains an unpromoted draft.
+
 The first public command set is:
 
 ```text
@@ -308,4 +329,7 @@ The feature is complete only when all statements below are proven:
     the receiver.
 13. Every admitted deployment can be traced from receipt to ticket, grant,
     identities, manifest digest, artifact digest, machine, and human actor.
-
+14. Local execution is always labeled draft and can never produce an official
+    deployment receipt.
+15. Every promotion names LAB 8GB or LAB 512 explicitly; neither destination is
+    inferred from the current machine, SSH configuration, or previous command.
