@@ -19,6 +19,7 @@ test("migration source contains authority, one ADK table migration, and its advi
     "20260907180351_entity_contracts.sql",
     "20260907181653_entity_hardening.sql",
     "20260907181737_entity_hardening_fix_array_append.sql",
+    "20260907195443_place_and_park_contracts.sql",
   ]);
 });
 
@@ -121,5 +122,29 @@ test("ADK runtime migration keeps durable state together and behind RLS", async 
   assert.match(sql, /idempotency key is required/);
   assert.match(sql, /invalid run transition/);
   assert.match(sql, /v_inserted/);
+  assert.doesNotMatch(sql, /service_role/);
+});
+
+test("place and park contracts add place kind, versioned contracts, and CI without a service_role", async () => {
+  const sql = (await readFile(new URL("20260907195443_place_and_park_contracts.sql", migrationsUrl), "utf8"))
+    .replaceAll(/--.*$/gm, "")
+    .toLowerCase();
+
+  assert.match(sql, /'place'/);
+  assert.doesNotMatch(sql, /kind in \([^)]*'engine'/);
+  assert.match(sql, /powerfarm_entity_contract\(p_kind text, p_version integer\)/);
+  assert.match(sql, /when 2 then array\['slug','title','owner','lifecycle','runtime','repository','health','environments','place','qualifier'\]/);
+  assert.match(sql, /park_type must be engine-park or app-park/);
+  assert.match(sql, /qualifier must be app or engine/);
+  assert.match(sql, /create or replace function public\.powerfarm_register_entity/);
+  assert.match(sql, /create table if not exists public\.ci_reports/);
+  assert.match(sql, /create table if not exists public\.service_credentials/);
+  assert.match(sql, /alter table public\.ci_reports enable row level security/);
+  assert.match(sql, /alter table public\.service_credentials enable row level security/);
+  assert.match(sql, /create or replace view public\.park_occupancy/);
+  assert.match(sql, /security_invoker = true/);
+  assert.match(sql, /'ci\.report'/);
+  assert.match(sql, /'deployments\.read'/);
+  assert.match(sql, /this is the powerfarm service credential, not a github app key/);
   assert.doesNotMatch(sql, /service_role/);
 });

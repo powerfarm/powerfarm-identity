@@ -1,0 +1,53 @@
+{
+  "comment": "Required metadata keys per kind and contract version. Must equal public.powerfarm_entity_contract(kind, version); enforced by scripts/check-contract-parity.mjs.",
+  "current": {
+    "person": 1,
+    "office": 1,
+    "app": 2,
+    "agent": 1,
+    "machine": 1,
+    "workflow": 1,
+    "object": 1,
+    "place": 1
+  },
+  "required": {
+    "person": {
+      "1": ["slug", "title"]
+    },
+    "office": {
+      "1": ["slug", "title", "mandate"]
+    },
+    "app": {
+      "1": ["slug", "title", "owner", "lifecycle", "runtime", "repository", "health", "environments"],
+      "2": ["slug", "title", "owner", "lifecycle", "runtime", "repository", "health", "environments", "place", "qualifier"]
+    },
+    "agent": {
+      "1": ["slug", "title", "owner", "lifecycle", "mandate", "capabilities"]
+    },
+    "machine": {
+      "1": ["slug", "title", "owner", "lifecycle", "os", "arch"]
+    },
+    "workflow": {
+      "1": ["slug", "title", "owner", "lifecycle", "trigger", "steps"]
+    },
+    "object": {
+      "1": ["slug", "title", "owner", "qualifier"]
+    },
+    "place": {
+      "1": ["slug", "title", "owner", "machine", "path", "park_type"]
+    }
+  },
+  "park": {
+    "types": ["engine-park", "app-park"],
+    "tenant_qualifier": {
+      "app": {
+        "place_park_type": "app-park",
+        "requires": ["route", "brand_version"]
+      },
+      "engine": {
+        "place_park_type": "engine-park",
+        "requires": ["resources", "capabilities", "bindings"]
+      }
+    }
+  }
+}
