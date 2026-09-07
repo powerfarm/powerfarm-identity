@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
@@ -15,7 +16,23 @@ test("migration source contains authority, one ADK table migration, and its advi
     "20260820192536_gadget_lineage.sql",
     "20260829012434_admit_brand_v03.sql",
     "20260829012439_registry_identity_authority.sql",
+    "20260907180351_entity_contracts.sql",
+    "20260907181653_entity_hardening.sql",
+    "20260907181737_entity_hardening_fix_array_append.sql",
   ]);
+});
+
+test("recovered production entity migrations match live statement md5", async () => {
+  const expected = {
+    "20260907180351_entity_contracts.sql": "8374306a65f0ddc22ca56dac4bfd1233",
+    "20260907181653_entity_hardening.sql": "34e30574a2407bbd94c7bfd185d9a06b",
+    "20260907181737_entity_hardening_fix_array_append.sql": "f10de7d291aa06b7e9dedf28a2c78505",
+  };
+  for (const [name, hash] of Object.entries(expected)) {
+    const raw = await readFile(new URL(name, migrationsUrl));
+    const body = raw.at(-1) === 0x0a ? raw.subarray(0, -1) : raw;
+    assert.equal(createHash("md5").update(body).digest("hex"), hash, name);
+  }
 });
 
 test("Registry authority migration makes OAuth administration grant-bound", async () => {

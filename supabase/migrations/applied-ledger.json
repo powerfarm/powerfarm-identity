@@ -1,6 +1,6 @@
 {
   "project": "powerfarm",
-  "observedAt": "2026-08-29",
+  "observedAt": "2026-09-07",
   "entries": [
     { "version": "0001", "name": "identity", "source": "0001_identity.sql" },
     { "version": "0002", "name": "manifest", "source": "0002_manifest.sql" },
@@ -9,6 +9,9 @@
     { "version": "0005", "name": "adk_runtime_advisors", "source": "0005_adk_runtime_advisors.sql" },
     { "version": "20260820192536", "name": "gadget_lineage", "source": "20260820192536_gadget_lineage.sql" },
     { "version": "20260829012434", "name": "admit_brand_v03", "source": "20260829012434_admit_brand_v03.sql" },
-    { "version": "20260829012439", "name": "registry_identity_authority", "source": "20260829012439_registry_identity_authority.sql" }
+    { "version": "20260829012439", "name": "registry_identity_authority", "source": "20260829012439_registry_identity_authority.sql" },
+    { "version": "20260907180351", "name": "entity_contracts", "source": "20260907180351_entity_contracts.sql" },
+    { "version": "20260907181653", "name": "entity_hardening", "source": "20260907181653_entity_hardening.sql" },
+    { "version": "20260907181737", "name": "entity_hardening_fix_array_append", "source": "20260907181737_entity_hardening_fix_array_append.sql" }
   ]
 }
