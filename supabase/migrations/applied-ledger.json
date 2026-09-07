@@ -12,6 +12,7 @@
     { "version": "20260829012439", "name": "registry_identity_authority", "source": "20260829012439_registry_identity_authority.sql" },
     { "version": "20260907180351", "name": "entity_contracts", "source": "20260907180351_entity_contracts.sql" },
     { "version": "20260907181653", "name": "entity_hardening", "source": "20260907181653_entity_hardening.sql" },
-    { "version": "20260907181737", "name": "entity_hardening_fix_array_append", "source": "20260907181737_entity_hardening_fix_array_append.sql" }
+    { "version": "20260907181737", "name": "entity_hardening_fix_array_append", "source": "20260907181737_entity_hardening_fix_array_append.sql" },
+    { "version": "20260907195443", "name": "place_and_park_contracts", "source": "20260907195443_place_and_park_contracts.sql" }
   ]
 }
