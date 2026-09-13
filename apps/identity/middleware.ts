@@ -1,5 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  PENDING_AUTHORIZATION_COOKIE,
+  pendingAuthorizationCookie,
+  resumeAuthorizationId,
+} from "./lib/auth-flow.mjs";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -21,6 +26,18 @@ export async function middleware(request: NextRequest) {
   );
 
   await supabase.auth.getClaims();
+
+  const { pathname, protocol, searchParams } = request.nextUrl;
+  if (pathname === "/login") {
+    const pending = resumeAuthorizationId(searchParams.get("authorization_id"));
+    if (pending) {
+      const cookie = pendingAuthorizationCookie(pending, { secure: protocol === "https:" });
+      response.cookies.set(cookie.name, cookie.value, cookie.options);
+    }
+  } else if (pathname === "/oauth/consent") {
+    // Consent carries the id itself; the pending copy only has to outlive sign-in.
+    response.cookies.delete(PENDING_AUTHORIZATION_COOKIE);
+  }
   return response;
 }
 
