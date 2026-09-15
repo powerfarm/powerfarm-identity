@@ -15,6 +15,7 @@ test("migration source contains authority, one ADK table migration, and its advi
     "20260820192536_gadget_lineage.sql",
     "20260829012434_admit_brand_v03.sql",
     "20260829012439_registry_identity_authority.sql",
+    "20260915083641_antenna_service_contracts.sql",
   ]);
 });
 
