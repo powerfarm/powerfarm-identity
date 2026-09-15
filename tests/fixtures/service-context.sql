@@ -1,0 +1,3 @@
+create function public.identidade_atual() returns uuid language sql stable security definer set search_path='' as $$ select identity_id from public.identity_links where supabase_user=auth.uid() and unlinked_at is null $$;
+create table public.service_credentials(id uuid primary key default gen_random_uuid(), identity_id uuid not null references public.identities(id), label text, secret_hash text not null unique,valid_from timestamptz not null default now(),valid_until timestamptz,revoked_at timestamptz);
+grant select on public.identity_links,public.identities,public.artifacts,public.artifact_versions to authenticated;
